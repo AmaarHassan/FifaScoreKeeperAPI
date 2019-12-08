@@ -4,7 +4,6 @@ const schemaConstants = require('../constants/schema');
 const regexConstants = require('../constants/regex');
 
 // validation schema with mongoose
-
 const PlayerSchema = new Schema({
     firstName: {
         type: String,
