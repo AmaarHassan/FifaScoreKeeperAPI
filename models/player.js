@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const schemaConstants = require('../constants/schema');
-const regexConstants = require('../constants/regex');
+const mongoose = require('mongoose')
+const extendSchema = require('mongoose-extend-schema')
+const BaseSchema = require('./baseSchema')
+const schemaConstants = require('../constants/schema')
+const regexConstants = require('../constants/regex')
 
 // validation schema with mongoose
-const PlayerSchema = new Schema({
+const PlayerSchema = extendSchema(BaseSchema, {
     firstName: {
         type: String,
         required: [true, schemaConstants.FIRST_NAME_MISSING]
@@ -36,22 +37,19 @@ const PlayerSchema = new Schema({
 
 class PlayerClass {
 
-    // this is for gettin all players
-    static async getAll() {
+    static async getAll(query) {
         try {
+            let { conditions, filter, skip, limit, order } = query;
             return await this.find(
-                // condition
-                {},
-                // returns
-                { _id: false, __v: false }
-            );
+                conditions,
+                filter
+            ).limit(limit).skip(skip).sort(order).lean();
         } catch (error) {
             console.log(error);
             throw new Error(error);
         }
     }
 
-    // get single player??
     static async get(uuid) {
         try {
             return await this.findOne(
@@ -72,7 +70,7 @@ class PlayerClass {
         }
         catch (error) {
             console.log(error);
-            return error
+            throw new Error(error)
         }
     }
 }

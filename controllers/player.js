@@ -1,9 +1,12 @@
 const uuid = require('uuid/v4');
-const playerModel = require('../models/player');
+const queryBuilder = require('../helpers/queryBuilder');
+const PlayerService = require('../services/player');
+const playerService = new PlayerService();
 
 const getAll = async (req, res) => {
     try {
-        const players = await playerModel.getAll();
+        const query = queryBuilder(req.query);
+        const players = await playerService.getAll(query);
         res.send(players);
     } catch (error) {
         res.send(error);
@@ -16,7 +19,7 @@ const get = async (req, res) => {
         if (!uuid) {
             throw new Error('Invalid uuid in params')
         }
-        const player = await playerModel.get(uuid);
+        const player = await playerService.get(uuid);
         res.send(player);
     } catch (error) {
         res.send(error);
@@ -28,7 +31,7 @@ const insert = async (req, res) => {
         const player = req.body;
         // attach uuid with player
         player.uuid = uuid();
-        const response = await playerModel.insert(player);
+        const response = await playerService.insert(player);
         res.send(response);
     } catch (error) {
         res.send(error);

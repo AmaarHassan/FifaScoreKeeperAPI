@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const dbConfig = require('./config/db.json');
 const config = require('./config/config.json');
 const router = require('./routes');
+const { startApolloServer } = require('./apolloServer');
 
 const app = express();
 
@@ -28,4 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/', router);
 
 // listening on port
-app.listen(config.port, () => console.log(`FIFA Score Keeper API Running at ${config.port}`));
+app.listen(config.port, () => {
+    console.log(`FIFA Score Keeper API Running at ${config.port}`)
+    startApolloServer();
+});
