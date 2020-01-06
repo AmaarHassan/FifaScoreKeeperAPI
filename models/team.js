@@ -1,41 +1,42 @@
 const mongoose = require('mongoose')
-const extendSchema = require('mongoose-extend-schema')
-const BaseSchema = require('./baseSchema')
+const Schema = mongoose.Schema
 const schemaConstants = require('../constants/schema')
-const regexConstants = require('../constants/regex')
+const Member = require('./memberSchema')
 
-// validation schema with mongoose
-const PlayerSchema = extendSchema(BaseSchema, {
-    firstName: {
-        type: String,
-        required: [true, schemaConstants.FIRST_NAME_MISSING]
+const TeamSchema = new Schema({
+    name: {
+        type: String
     },
-    lastName: {
-        type: String,
-        required: [true, schemaConstants.LAST_NAME_MISSING]
+    game: {
+        // later we can put reference of uuid of the fifa game document
+        type: String
     },
-    email: {
-        type: String,
-        validate: {
-            validator: function (v) {
-                return regexConstants.EMAIL_REGEX.test(v);
-            },
-            message: props => `${props.value} ${schemaConstants.INVALID_EMAIL}`
-        },
-        required: [true, schemaConstants.EMAIL_MISSING]
+    stars: {
+        type: Number
     },
-    password: {
-        type: String,
-        required: [true, schemaConstants.PASSWORD_MISSING],
-        minlength: [8, schemaConstants.PASSWORD_INVALID_LENGTH]
+    league: {
+        type: String
     },
+    logo: {
+        type: String
+    },
+    attack: {
+        type: Number
+    },
+    midfield: {
+        type: Number
+    },
+    defence: {
+        type: Number
+    },
+    members: [Member],
     uuid: {
         type: String,
         required: [true, schemaConstants.UUID_MISSING]
     }
 })
 
-class PlayerClass {
+class TeamClass {
 
     static async getAll(query) {
         try {
@@ -57,30 +58,30 @@ class PlayerClass {
                 { uuid: uuid },
                 // returns
                 { _id: false, __v: false }
-            ).lean();
+            );
         } catch (error) {
             console.log(error);
             throw new Error(error);
         }
     }
 
-    static async getMultipleByUuids(uuids) {
+    static async getByGame(game) {
         try {
             return await this.find(
                 // condition
-                { uuid: { $in: uuids } },
+                { game },
                 // returns
                 { _id: false, __v: false }
-            ).lean();
+            );
         } catch (error) {
             console.log(error);
             throw new Error(error);
         }
     }
 
-    static async insert(player) {
+    static async insert(team) {
         try {
-            return await this.create(player).lean()
+            return await this.create(team)
         }
         catch (error) {
             console.log(error);
@@ -89,8 +90,8 @@ class PlayerClass {
     }
 }
 // load class in the schema
-PlayerSchema.loadClass(PlayerClass);
+TeamSchema.loadClass(TeamClass);
 // make mongoose model
-const PlayerModel = mongoose.model('Players', PlayerSchema);
+const TeamModel = mongoose.model('Team', TeamSchema);
 // export
-module.exports = PlayerModel
+module.exports = TeamModel

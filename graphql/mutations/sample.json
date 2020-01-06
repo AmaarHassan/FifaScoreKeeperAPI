@@ -1,0 +1,216 @@
+mutation{
+  createTeam(input:{
+    name: "Real Madrid",
+    fifaGame: "Fifa 18",
+    stars: 5,
+    league: "Liga BBVA",
+    logo: "http://www.somelink.com",
+    attack: 86,
+    midfield: 86,
+    defence: 86,
+    members: [
+      {
+        name: "Keylor Navas",
+        position: "GK",
+      	overall: 85,
+        avatar: "abv",
+        captain: false,
+        sub: false
+      },
+      {
+        name: "Carvajal",
+        position: "RB",
+      	overall: 84,
+        avatar: "abv",
+        captain: false,
+        sub: false        
+      },
+      {
+        name: "Raphaël Varane",
+        position: "CB",
+      	overall: 85,
+        avatar: "abv",
+        captain: false,
+        sub: false
+      },
+      {
+        name: "Sergio Ramos",
+        position: "CB",
+      	overall: 90,
+        avatar: "abv",
+        captain: true,
+        sub: false
+      },
+      {
+        name: "Marcelo",
+        position: "LB",
+      	overall: 87,
+        avatar: "abv",
+        captain: false,
+        sub: false
+      },
+      {
+        name: "Casemiro",
+        position: "CDM",
+      	overall: 86,
+        avatar: "abv",
+        captain: false,
+        sub: false
+      },
+      {
+        name: "Luka Modrić",
+        position: "RCM",
+      	overall: 89,
+        avatar: "abv",
+        captain: false,
+      	sub: false
+      },
+      {
+        name: "Toni Kroos",
+        position: "RW",
+      	overall: 88,
+        avatar: "abv",
+        captain: false,
+        sub: false
+      },
+      {
+        name: "Gareth Bale",
+        position: "RW",
+      	overall: 88,
+        avatar: "abv",
+        captain: false,
+        sub: false
+      },
+      {
+        name: "Karim Benzema",
+        position: "ST",
+        overall: 85,
+        avatar: "abv",
+        captain: false,
+        sub: false
+      },
+      {
+        name: "Cristiano Ronaldo",
+        position: "LW",
+      	overall: 94,
+        avatar: "abv",
+        captain: false,
+        sub: false
+      },
+      {
+        name: "Achraf Hakimi",
+        position: "RB, LB",
+      	overall: 73,
+        avatar: "abv",
+        captain: false,
+        sub: true
+      },
+      {
+        name: "Lucas Vázquez",
+        position: "RW,RM",
+      	overall: 82,
+        avatar: "abv",
+        captain: false,
+        sub: true
+      },
+      {
+        name: "Marco Asensio",
+      	position: "LW CAM RW",
+      	overall: 84,
+        avatar: "abv",
+        captain: false
+        sub: true        
+      },
+      {
+        "name": "Mateo Kovačić",
+        "position": "CM CDM",
+      	"overall": 82,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      },
+      {
+        "name": "Vallejo",
+        "position": "CB",
+      	"overall": 78,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      }
+      {
+        "name": "Theo Hernández",
+        "position": "LB",
+      	"overall": 75,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      },
+      {
+        "name": "Kiko Casilla",
+        "position": "GK",
+      	"overall": 80,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      },
+      {
+        "name": "Isco",
+        "position": "CM,CAM",
+      	"overall": 86,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      },
+      {
+        "name": "Nacho Fernández",
+        "position": "CB,LB,RB",
+      	"overall": 81,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      },
+      {
+        "name": "Marcos Llorente",
+        "position": "CDM",
+      	"overall": 78,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      },
+      {
+        "name": "Borja Mayoral",
+        "position": "ST",
+      	"overall": 72,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      },
+      {
+        "name": "Dani Ceballos",
+        "position": "CM,LM,CDM,CAM",
+      	"overall": 78,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      },
+      {
+        "name": "Óscar",
+        "position": "CAM,CM",
+      	"overall": 68,
+        "avatar": "abv",
+        "captain": false
+        "sub": true        
+      }
+    ]
+  }) {
+    name
+    fifaGame
+    defence
+    members {
+      name
+      position
+      avatar
+      overall
+    }
+  }
+}

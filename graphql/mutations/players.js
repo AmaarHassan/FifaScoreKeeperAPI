@@ -1,5 +1,5 @@
 const PlayerService = require('../../services/player')
-const PlayerType = require('../types/output/players')
+const PlayerType = require('../types/output/player')
 const { CreatePlayerInputType } = require('../types/input/playerInputType')
 const playerService = new PlayerService()
 
