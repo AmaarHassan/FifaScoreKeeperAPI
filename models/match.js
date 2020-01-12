@@ -70,6 +70,24 @@ class MatchClass {
             throw new Error(error);
         }
     }
+
+    static async getPlayerIdsWithStats(season) {
+        try {
+            return await this.aggregate([
+                { $unwind: '$matchPlayers' },
+                { $match: { season: season } },
+                {
+                    $group: {
+                        _id: '$matchPlayers.player',
+                        goals: { $push: "$matchPlayers.goals" }
+                    }
+                }
+            ])
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
+    }
 }
 // load class in the schema
 MatchSchema.loadClass(MatchClass);

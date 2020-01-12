@@ -58,7 +58,7 @@ module.exports = class SeasonService {
                     players[winner] = players[winner] ? players[winner] += 1 : 1
                 })
             })
-            
+
             return players;
         } catch (error) {
 
@@ -141,6 +141,15 @@ module.exports = class SeasonService {
             return playerWithGoals;
         } catch (error) {
             return new Error(error);
+        }
+    }
+
+    async getPlayerStats(season) {
+        try {
+            return await matchService.getPlayerIdsWithStats(season);
+        } catch (error) {
+            console.log(error)
+            throw new Error(error)
         }
     }
 }

@@ -13,6 +13,7 @@ const playerService = new PlayerService()
 
 const { PlayerWithMatchWonCount } = require('./playerWithMatchWonCount')
 const { PlayerWithGoalsCount } = require('./playerWithGoalCount')
+const { PlayerStats } = require('./playerStats')
 const { Player } = require('./player')
 
 const Season = new GraphQLObjectType({
@@ -41,16 +42,11 @@ const Season = new GraphQLObjectType({
                 }
             }
         },
-        playerWithMatchesWon: {
-            type: new GraphQLList(PlayerWithMatchWonCount),
+        playerStats: {
+            type: new GraphQLList(PlayerStats),
             resolve: async (parent, args) => {
-                return await seasonService.getPlayersWithMatchesWon(parent.uuid);
-            }
-        },
-        playerWithGoalsCount: {
-            type: new GraphQLList(PlayerWithGoalsCount),
-            resolve: async (parent, args) => {
-                return await seasonService.getPlayerWithGoalsCount(parent.uuid);
+                const result = await seasonService.getPlayerStats(parent.uuid);
+                return result;
             }
         },
         uuid: { type: GraphQLString }
