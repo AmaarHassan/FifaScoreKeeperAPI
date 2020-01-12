@@ -65,80 +65,10 @@ module.exports = class SeasonService {
         }
     }
 
-    async getPlayerIdswithGoalsCount(season) {
-        try {
-            let players = [];
-
-            const seasonMatches = await matchService.getBySeason(season);
-
-            seasonMatches.forEach((match) => {
-                match.matchPlayers.forEach(matchPlayer => {
-                    players[matchPlayer.player] = players[matchPlayer.player] ? players[matchPlayer.player] += matchPlayer.goals.length : matchPlayer.goals.length
-                });
-            });
-
-            return players;
-        } catch (error) {
-
-        }
-    }
-
     async getSeasonWinner(season) {
         try {
             const players = await this.getPlayerIdswithMatchesWonCount(season);
             return winnerByMatches(players)
-        } catch (error) {
-            return new Error(error);
-        }
-    }
-
-    async getPlayersWithMatchesWon(season) {
-        try {
-            let promiseArray = [];
-            let players = [];
-            let playerWithMatches = [];
-            let playersIdsWithMatchesWon = await this.getPlayerIdswithMatchesWonCount(season);
-
-            for (let key in playersIdsWithMatchesWon) {
-                promiseArray.push(new Promise((resolve, reject) =>
-                    resolve(playerService.get(key))
-                ))
-            }
-
-            players = await Promise.all(promiseArray);
-
-            for (let key in playersIdsWithMatchesWon) {
-                let player = players.find((player) => player.uuid === key)
-                playerWithMatches.push({ ...player, matches: playersIdsWithMatchesWon[key] })
-            }
-
-            return playerWithMatches;
-        } catch (error) {
-            return new Error(error);
-        }
-    }
-
-    async getPlayerWithGoalsCount(season) {
-        try {
-            let promiseArray = [];
-            let players = [];
-            let playerWithGoals = [];
-            let playersIdsWithGoalsCount = await this.getPlayerIdswithGoalsCount(season);
-
-            for (let key in playersIdsWithGoalsCount) {
-                promiseArray.push(new Promise((resolve, reject) =>
-                    resolve(playerService.get(key))
-                ))
-            }
-
-            players = await Promise.all(promiseArray);
-
-            for (let key in playersIdsWithGoalsCount) {
-                let player = players.find((player) => player.uuid === key)
-                playerWithGoals.push({ ...player, goals: playersIdsWithGoalsCount[key] })
-            }
-
-            return playerWithGoals;
         } catch (error) {
             return new Error(error);
         }

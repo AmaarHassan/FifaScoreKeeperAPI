@@ -11,8 +11,6 @@ const matchService = new MatchService()
 const seasonService = new SeasonService()
 const playerService = new PlayerService()
 
-const { PlayerWithMatchWonCount } = require('./playerWithMatchWonCount')
-const { PlayerWithGoalsCount } = require('./playerWithGoalCount')
 const { PlayerStats } = require('./playerStats')
 const { Player } = require('./player')
 

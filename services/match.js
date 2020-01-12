@@ -1,6 +1,5 @@
 const uuid = require('uuid/v4');
 const matchModel = require('../models/match');
-const winner = require('../helpers/winner');
 
 module.exports = class MatchService {
 
