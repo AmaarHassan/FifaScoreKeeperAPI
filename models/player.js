@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const extendSchema = require('mongoose-extend-schema')
 const BaseSchema = require('./baseSchema')
 const schemaConstants = require('../constants/schema')
@@ -32,6 +33,24 @@ const PlayerSchema = extendSchema(BaseSchema, {
     uuid: {
         type: String,
         required: [true, schemaConstants.UUID_MISSING]
+    }
+})
+
+PlayerSchema.pre('save', function (next) {
+    const player = this;
+    // not for old players
+    if (!player.isModified || !player.isNew) {
+        next();
+    } else {
+        bcrypt.hash(player.password, 10, function (err, encrypted) {
+            if (err) {
+                consoe.log('Could not hash the password ', err)
+                next(err)
+            } else {
+                player.password = encrypted
+                next()
+            }
+        })
     }
 })
 
@@ -80,7 +99,7 @@ class PlayerClass {
 
     static async insert(player) {
         try {
-            return await this.create(player).lean()
+            return await this.create(player)
         }
         catch (error) {
             console.log(error);
