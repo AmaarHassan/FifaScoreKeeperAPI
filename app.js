@@ -2,25 +2,21 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-const dbConfig = require('./config/db.json');
-const config = require('./config/config.json');
 const router = require('./routes');
 const { startApolloServer } = require('./apolloServer');
 
 const app = express();
 
 mongoose.connect(
-    dbConfig.dbConnectionURI,
+    process.env.dbConnectionURI,
     { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
         if (err) {
             console.log(err);
             throw new Error(err);
         }
-        console.log(`--Mongo Connected--`);
+        console.log(`MongoDB : ${process.env.dbConnectionURI}`);
     }
 )
-
-const db = mongoose.connection;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -29,7 +25,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/', router);
 
 // listening on port
-app.listen(config.port, () => {
-    console.log(`FIFA Score Keeper API Running at ${config.port}`)
+app.listen(process.env.port, () => {
+    console.log(`FIFA Score Keeper API Running at ${process.env.port}`)
+    console.log(`Environment: ${process.env.ENV} `)
     startApolloServer();
 });

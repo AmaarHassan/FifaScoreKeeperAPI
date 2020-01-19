@@ -10,7 +10,7 @@ const queryBuilder = (query) => {
         query.limit = 100
     }
     if (!query.order || (Object.keys(query.order).length < 1)) {
-        query.order = { firstName: 1 }
+        query.order = { createdAt: 1 }
     }
     if (!query.skip) {
         query.skip = 0

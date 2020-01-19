@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app",
+    "dev": "cross-env ENV=development port=3000 dbConnectionURI=mongodb://localhost/FifaScoreKeeper nodemon app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +22,7 @@
     "apollo-server-express": "^2.9.13",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "cross-env": "^6.0.3",
     "express": "^4.17.1",
     "graphql": "^14.5.8",
     "graphql-type-json": "^0.3.1",

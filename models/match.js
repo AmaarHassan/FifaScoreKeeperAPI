@@ -2,40 +2,25 @@ const mongoose = require('mongoose')
 const extendSchema = require('mongoose-extend-schema')
 const BaseSchema = require('./baseSchema')
 const schemaConstants = require('../constants/schema')
-const regexConstants = require('../constants/regex')
+const MatchPlayer = require('./matchPlayer')
 
-// validation schema with mongoose
-const PlayerSchema = extendSchema(BaseSchema, {
-    firstName: {
-        type: String,
-        required: [true, schemaConstants.FIRST_NAME_MISSING]
+const MatchSchema = extendSchema(BaseSchema, {
+    playedAt: {
+        type: Date,
+        default: null
     },
-    lastName: {
-        type: String,
-        required: [true, schemaConstants.LAST_NAME_MISSING]
-    },
-    email: {
-        type: String,
-        validate: {
-            validator: function (v) {
-                return regexConstants.EMAIL_REGEX.test(v);
-            },
-            message: props => `${props.value} ${schemaConstants.INVALID_EMAIL}`
-        },
-        required: [true, schemaConstants.EMAIL_MISSING]
-    },
-    password: {
-        type: String,
-        required: [true, schemaConstants.PASSWORD_MISSING],
-        minlength: [8, schemaConstants.PASSWORD_INVALID_LENGTH]
-    },
+    matchPlayers: [MatchPlayer],
     uuid: {
         type: String,
         required: [true, schemaConstants.UUID_MISSING]
+    },
+    season: {
+        type: String,
+        default: null
     }
 })
 
-class PlayerClass {
+class MatchClass {
 
     static async getAll(query) {
         try {
@@ -57,21 +42,7 @@ class PlayerClass {
                 { uuid: uuid },
                 // returns
                 { _id: false, __v: false }
-            ).lean();
-        } catch (error) {
-            console.log(error);
-            throw new Error(error);
-        }
-    }
-
-    static async getMultipleByUuids(uuids) {
-        try {
-            return await this.find(
-                // condition
-                { uuid: { $in: uuids } },
-                // returns
-                { _id: false, __v: false }
-            ).lean();
+            );
         } catch (error) {
             console.log(error);
             throw new Error(error);
@@ -80,17 +51,47 @@ class PlayerClass {
 
     static async insert(player) {
         try {
-            return await this.create(player).lean()
+            return await this.create(player)
         }
         catch (error) {
             console.log(error);
             throw new Error(error)
         }
     }
+
+    static async getBySeason(season) {
+        try {
+            return await this.find(
+                { season },
+                { _id: false, __v: false }
+            ).lean();
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
+    }
+
+    static async getPlayerIdsWithStats(season) {
+        try {
+            return await this.aggregate([
+                { $unwind: '$matchPlayers' },
+                { $match: { season: season } },
+                {
+                    $group: {
+                        _id: '$matchPlayers.player',
+                        goals: { $push: "$matchPlayers.goals" }
+                    }
+                }
+            ])
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
+    }
 }
 // load class in the schema
-PlayerSchema.loadClass(PlayerClass);
+MatchSchema.loadClass(MatchClass);
 // make mongoose model
-const PlayerModel = mongoose.model('Players', PlayerSchema);
+const MatchModel = mongoose.model('Match', MatchSchema);
 // export
-module.exports = PlayerModel
+module.exports = MatchModel

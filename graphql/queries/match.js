@@ -1,5 +1,5 @@
-const PlayerService = require('../../services/player');
-const PlayerType = require('../types/output/player')
+const MatchService = require('../../services/match');
+const MatchType = require('../types/output/match')
 const QueryType = require('../types/general/query');
 const queryBuilder = require('../../helpers/queryBuilder');
 
@@ -9,13 +9,11 @@ const {
     GraphQLNonNull
 } = require('graphql')
 
-const playerService = new PlayerService();
+const matchService = new MatchService();
 
-// an object to hold the queries of players
-const PlayerQueries = {
-    // get all players matching the query
-    players: {
-        type: new GraphQLList(PlayerType.Player),
+const MatchQueries = {
+    matches: {
+        type: new GraphQLList(MatchType.Match),
         args: {
             query: { type: QueryType }
         },
@@ -23,22 +21,22 @@ const PlayerQueries = {
             try {
                 let query = args.query;
                 query = queryBuilder(query);
-                return await playerService.getAll(query);
+                return await matchService.getAll(query);
             } catch (error) {
                 return new Error(error)
             }
         }
     },
-    // get single player matching the uuid
-    player: {
-        type: PlayerType.Player,
+
+    match: {
+        type: MatchType.Match,
         args: {
             id: { type: new GraphQLNonNull(GraphQLID) }
         },
         resolve: async (parent, args) => {
             try {
                 const uuid = args.id;
-                return await playerService.get(uuid);
+                return await matchService.get(uuid);
             } catch (error) {
                 return new Error(error)
             }
@@ -47,4 +45,4 @@ const PlayerQueries = {
 }
 
 
-module.exports = PlayerQueries
+module.exports = MatchQueries

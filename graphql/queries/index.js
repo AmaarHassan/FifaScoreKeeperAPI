@@ -1,10 +1,18 @@
-const PlayerQueries = require('./players');
+const PlayerQueries = require('./players')
+const TeamQueries = require('./team')
+const GameQueries = require('./game')
+const MatchQueries = require('./match')
+const SeasonQueries = require('./season')
 const { GraphQLObjectType } = require('graphql')
 
 const RootQuery = new GraphQLObjectType({
     name: 'Query',
     fields: {
-        ...PlayerQueries
+        ...PlayerQueries,
+        ...TeamQueries,
+        ...GameQueries,
+        ...MatchQueries,
+        ...SeasonQueries
     }
 });
 

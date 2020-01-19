@@ -24,6 +24,17 @@ module.exports = class PlayerService {
         }
     }
 
+    async getMultipleByUuids(uuids) {
+        try {
+            if (!uuids.length) {
+                throw new Error('Invalid uuids')
+            }
+            return await playerModel.getMultipleByUuids(uuids)
+        } catch (error) {
+            return new Error(error);
+        }
+    }
+
     async insert(player) {
         try {
             player.uuid = uuid();
@@ -32,4 +43,5 @@ module.exports = class PlayerService {
             return new Error(error);
         }
     }
+    
 }
