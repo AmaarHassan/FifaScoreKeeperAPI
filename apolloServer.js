@@ -4,11 +4,14 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { ApolloServer } = require('apollo-server-express');
 const schema = require('./graphql/schema.js')
+const validateToken = require('./middleware/validateToken')
 
 const app = express();
 app.use(bodyParser.json());
 // to allow access from all addresses
 app.use('*', cors({ origin: '*' }));
+
+app.use(validateToken);
 
 const apollo = new ApolloServer({
     schema,

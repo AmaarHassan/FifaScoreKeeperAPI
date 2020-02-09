@@ -33,6 +33,9 @@ const PlayerSchema = extendSchema(BaseSchema, {
     uuid: {
         type: String,
         required: [true, schemaConstants.UUID_MISSING]
+    },
+    token: {
+        type: String
     }
 })
 
@@ -83,6 +86,20 @@ class PlayerClass {
         }
     }
 
+    static async getByEmail(email) {
+        try {
+            return await this.findOne(
+                // condition
+                { email },
+                // returns
+                { _id: false, __v: false }
+            ).lean();
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
+    }
+
     static async getMultipleByUuids(uuids) {
         try {
             return await this.find(
@@ -100,6 +117,16 @@ class PlayerClass {
     static async insert(player) {
         try {
             return await this.create(player)
+        }
+        catch (error) {
+            console.log(error);
+            throw new Error(error)
+        }
+    }
+
+    static async updateFields(fields) {
+        try {
+            return await this.update({ uuid: fields.uuid }, fields)
         }
         catch (error) {
             console.log(error);

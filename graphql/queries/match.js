@@ -17,7 +17,7 @@ const MatchQueries = {
         args: {
             query: { type: QueryType }
         },
-        resolve: async (parent, args) => {
+        resolve: async (parent, args, ctx) => {
             try {
                 let query = args.query;
                 query = queryBuilder(query);
