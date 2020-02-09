@@ -64,4 +64,12 @@ module.exports = class PlayerService {
             return new Error(error);
         }
     }
+
+    async logout(player) {
+        try {
+            return await playerModel.logout(player);
+        } catch (error) {
+            return new Error(error);
+        }
+    }
 }

@@ -24,7 +24,15 @@ const LoggedIn = new GraphQLObjectType({
     })
 })
 
+const LogoutType = new GraphQLObjectType({
+    name: 'LoggedOut',
+    fields: () => ({
+        message: { type: GraphQLString}
+    })
+})
+
 module.exports = {
     LoggedIn,
+    LogoutType,
     Player
 }

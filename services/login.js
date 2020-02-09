@@ -38,4 +38,15 @@ module.exports = class PlayerService {
         }
     }
 
+    async logout(player) {
+        try {
+            const loggedout = await playerService.logout(player);
+            if (loggedout) {
+                return { message: 'Logged out successfully' };
+            }
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
 }

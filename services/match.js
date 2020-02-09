@@ -12,13 +12,12 @@ module.exports = class MatchService {
         }
     }
 
-    async get(uuid) {
+    async get(query) {
         try {
-            if (!uuid) {
+            if (!query || !query.conditions.uuid) {
                 throw new Error('Invalid uuid in params')
             }
-            const match = await matchModel.get(uuid);
-            return match
+            return await matchModel.get(query);
         } catch (error) {
             throw new Error(error);
         }

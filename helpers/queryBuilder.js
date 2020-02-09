@@ -1,7 +1,10 @@
 const queryBuilder = (query) => {
     // no filter obj  ||      // empty filter {}
     if (!query.filter || (Object.keys(query.filter).length < 1)) {
-        query.filter = {}
+        query.filter = {
+            _id: false,
+            __v: false
+        }
     }
     if (!query.conditions || (Object.keys(query.conditions).length < 1)) {
         query.conditions = {}

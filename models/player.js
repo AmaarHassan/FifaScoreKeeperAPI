@@ -133,6 +133,18 @@ class PlayerClass {
             throw new Error(error)
         }
     }
+
+    static async logout(player) {
+        try {
+            return await this.updateOne(
+                { uuid: player },
+                {
+                    $set: { token: null }
+                })
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 }
 // load class in the schema
 PlayerSchema.loadClass(PlayerClass);
