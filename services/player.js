@@ -1,4 +1,5 @@
 const uuid = require('uuid/v4');
+const bcrypt = require('bcrypt');
 const playerModel = require('../models/player');
 
 module.exports = class PlayerService {
@@ -24,6 +25,18 @@ module.exports = class PlayerService {
         }
     }
 
+    async getByEmail(email) {
+        try {
+            if (!email) {
+                throw new Error('Invalid uuid in params')
+            }
+            const player = await playerModel.getByEmail(email);
+            return player
+        } catch (error) {
+            return new Error(error);
+        }
+    }
+
     async getMultipleByUuids(uuids) {
         try {
             if (!uuids.length) {
@@ -43,5 +56,20 @@ module.exports = class PlayerService {
             return new Error(error);
         }
     }
-    
+
+    async updateFields(fields) {
+        try {
+            return await playerModel.updateFields(fields);
+        } catch (error) {
+            return new Error(error);
+        }
+    }
+
+    async logout(player) {
+        try {
+            return await playerModel.logout(player);
+        } catch (error) {
+            return new Error(error);
+        }
+    }
 }

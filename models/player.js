@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const extendSchema = require('mongoose-extend-schema')
 const BaseSchema = require('./baseSchema')
 const schemaConstants = require('../constants/schema')
@@ -32,6 +33,27 @@ const PlayerSchema = extendSchema(BaseSchema, {
     uuid: {
         type: String,
         required: [true, schemaConstants.UUID_MISSING]
+    },
+    token: {
+        type: String
+    }
+})
+
+PlayerSchema.pre('save', function (next) {
+    const player = this;
+    // not for old players
+    if (!player.isModified || !player.isNew) {
+        next();
+    } else {
+        bcrypt.hash(player.password, 10, function (err, encrypted) {
+            if (err) {
+                consoe.log('Could not hash the password ', err)
+                next(err)
+            } else {
+                player.password = encrypted
+                next()
+            }
+        })
     }
 })
 
@@ -64,6 +86,20 @@ class PlayerClass {
         }
     }
 
+    static async getByEmail(email) {
+        try {
+            return await this.findOne(
+                // condition
+                { email },
+                // returns
+                { _id: false, __v: false }
+            ).lean();
+        } catch (error) {
+            console.log(error);
+            throw new Error(error);
+        }
+    }
+
     static async getMultipleByUuids(uuids) {
         try {
             return await this.find(
@@ -80,11 +116,33 @@ class PlayerClass {
 
     static async insert(player) {
         try {
-            return await this.create(player).lean()
+            return await this.create(player)
         }
         catch (error) {
             console.log(error);
             throw new Error(error)
+        }
+    }
+
+    static async updateFields(fields) {
+        try {
+            return await this.update({ uuid: fields.uuid }, fields)
+        }
+        catch (error) {
+            console.log(error);
+            throw new Error(error)
+        }
+    }
+
+    static async logout(player) {
+        try {
+            return await this.updateOne(
+                { uuid: player },
+                {
+                    $set: { token: null }
+                })
+        } catch (error) {
+            throw new Error(error);
         }
     }
 }

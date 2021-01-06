@@ -35,14 +35,13 @@ class MatchClass {
         }
     }
 
-    static async get(uuid) {
+    static async get(query) {
         try {
+            let { conditions, filter, skip, limit, order } = query;
             return await this.findOne(
-                // condition
-                { uuid: uuid },
-                // returns
-                { _id: false, __v: false }
-            );
+                conditions,
+                filter
+            ).limit(limit).skip(skip).sort(order).lean();
         } catch (error) {
             console.log(error);
             throw new Error(error);
